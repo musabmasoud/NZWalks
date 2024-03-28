@@ -33,5 +33,39 @@ namespace NZWalks.Controllers
             var WalkDomainModel = await walkRepository.GetAllAsync();
             return Ok(mapper.Map<List<WalkDto>>(WalkDomainModel));
         }
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
+        {
+            var walkDomainModel= await walkRepository.GetByIdAsync(id);
+            if (walkDomainModel == null)
+            {
+                return NotFound();
+            }
+            return Ok(mapper.Map<WalkDto>(walkDomainModel));
+        }
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateWalkRequestDto updateWalkRequestDto)
+        {
+            var walkDomainModel =mapper.Map<Walk>(updateWalkRequestDto);
+               walkDomainModel = await walkRepository.UpdateAsync(id, walkDomainModel);
+            if (walkDomainModel == null)
+            {
+                return NotFound();
+            }
+            return Ok(mapper.Map<WalkDto>(walkDomainModel));
+        }
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var deleteWalkModel = await walkRepository.DeleteAsync(id);
+            if(deleteWalkModel == null)
+            {
+                return NotFound();
+            }
+            return Ok(mapper.Map<WalkDto>(deleteWalkModel));
+        }
     }
 }
