@@ -5,6 +5,7 @@ using NZWalks.CustomActionFilters;
 using NZWalks.Models.Domain;
 using NZWalks.Models.DTO;
 using NZWalks.Repositories;
+using System.Net;
 
 namespace NZWalks.Controllers
 {
@@ -32,10 +33,15 @@ namespace NZWalks.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
-            [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNamber = 1, [FromQuery] int pageSize = 1000)
+            [FromQuery] string? sortBy, [FromQuery] bool? isAscending,
+            [FromQuery] int pageNamber = 1, [FromQuery] int pageSize = 1000)
         {
-            var WalkDomainModel = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNamber, pageSize);
-            return Ok(mapper.Map<List<WalkDto>>(WalkDomainModel));
+
+                var WalkDomainModel = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNamber, pageSize);
+            //Create an exception
+            //throw new Exception("This is a new exception");
+                //Map Domain Model TO DTO
+                return Ok(mapper.Map<List<WalkDto>>(WalkDomainModel));
         }
         [HttpGet]
         [Route("{id:Guid}")]
